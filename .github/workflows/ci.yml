@@ -9,7 +9,7 @@ jobs:
     name: Source-level proof-hygiene grep
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Fail if any .lean file contains sorry/admit
         run: |
           if grep -rn --include="*.lean" -E '\bsorry\b|\badmit\b' .; then
