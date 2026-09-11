@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  sorry-check:
+    name: Source-level proof-hygiene grep
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fail if any .lean file contains sorry/admit
+        run: |
+          if grep -rn --include="*.lean" -E '\bsorry\b|\badmit\b' .; then
+            echo "::error::Found sorry/admit in Lean source (see above)."
+            exit 1
+          fi
+          echo "Clean: no sorry/admit found in any .lean file."
+
+  build:
+    name: Build ${{ matrix.project }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # dependency order isn't required here since each job gets a full
+        # checkout (relative-path local deps resolve regardless of matrix
+        # order), but listed base-to-dependent for readability
+        project:
+          - CNRSCore
+          - CNRSProblem1
+          - CnrsQ2
+          - CNRSArithmetic
+          - CNRSIntegration
+          - CNRSProblem2
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install elan (Lean toolchain manager)
+        run: |
+          curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh \
+            | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Build ${{ matrix.project }}
+        working-directory: ${{ matrix.project }}
+        run: |
+          lake exe cache get || echo "cache get unavailable or nothing to fetch, continuing"
+          lake build
+
+      # A clean `lake build` already fails on any actual sorryAx use turned
+      # into an error by the project's own lakefile warnings-as-errors
+      # setting, where enabled; per-theorem `#print axioms` inspection is
+      # a targeted, interactive check (see README) rather than something
+      # meaningful to automate blindly across an entire module here.

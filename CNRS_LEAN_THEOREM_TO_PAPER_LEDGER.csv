@@ -1,0 +1,7 @@
+ledger_id,paper,lean_project,lean_source,formal_status,paper_sync_status,scope_note
+CLTP-001,CNRS Problem 1 v13,CNRSProblem1,CNRSProblem1/*.lean,PROVED,SYNCHRONIZED,"P1-L1--L7; excludes a general Pisot theorem"
+CLTP-002,CNRS Problem 2 Layers v23,CNRSCore;CnrsQ2;CNRSProblem2,CNRSCore/*.lean;CnrsQ2/*.lean;CNRSProblem2/BranchCover.lean;CNRSProblem2/CanonicalLiftedLog.lean;CNRSProblem2/BranchSerialization.lean,PROVED_FINITE_SCOPE,SYNCHRONIZED,"finite carrier and explicit branch data; no arbitrary infinite serialization"
+CLTP-003,CNRS Problem 2 Capstone v20,CNRSProblem2,CNRSProblem2/*.lean,PROVED_FINITE_SCOPE,SYNCHRONIZED,"P2-L1--L10; no analytic continuation or path reconstruction"
+CLTP-004,CNRS Problem 3 v12,CNRSArithmetic;CNRSIntegration,CNRSArithmetic/*.lean;CNRSIntegration/AdditionBridge.lean,PARTIALLY_PROVED,SYNCHRONIZED,"addition fixed multipliers and certified division outcomes proved; unrestricted online multiplication impossible in governed model; streaming division open"
+CLTP-005,CNRS Problem 4 v16,CNRSCore;CNRSArithmetic;CNRSProblem1,CNRSCore/*.lean;CNRSArithmetic/*.lean;CNRSProblem1/*.lean,PARTIALLY_PROVED,SYNCHRONIZED,"finite operational kernel only; no general complex-representation completeness theorem"
+CLTP-006,CNRS Roadmap v13,ALL,consolidated release,STATUS_RECORD,SYNCHRONIZED,"capstone closed; paper/toolkit adoption precedes new Lean research"

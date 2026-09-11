@@ -1,0 +1,13 @@
+# Lake build artifacts (per project)
+*/.lake/
+*/build/
+
+# Compiled Lean objects, if ever produced outside .lake/
+*.olean
+*.ilean
+*.trace
+
+# Editor / OS
+.DS_Store
+.vscode/
+*.swp
