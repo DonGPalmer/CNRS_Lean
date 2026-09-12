@@ -1,7 +1,7 @@
-# CNRS Lean — Formal Verification for the CNRS Programme
+# CNRS Lean — Formal Verification for the Complex Numeric Representation System
 
 Lean 4 formalization of the finite-kernel mathematics underlying the
-**Complex Numeric Representational System (CNRS)**, a positional number
+**Complex Numeric Representation System (CNRS)**, a positional number
 system in base $z_0 = -2+i$ developed as part of the
 [Scale Space–CNRS research programme](https://www.ss-cnrs.nul1.com).
 Independent researcher: Donald G. Palmer

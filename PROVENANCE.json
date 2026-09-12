@@ -1,8 +1,10 @@
 {
   "schema_version": "1.0",
   "release": {
+    "programme_name": "Complex Numeric Representation System",
+    "programme_acronym": "CNRS",
     "repository": "https://github.com/DonGPalmer/CNRS_Lean",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "release_date": "2026-09-12",
     "zenodo_concept_doi": "10.5281/zenodo.22726349"
   },
