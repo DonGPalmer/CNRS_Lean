@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "release": {
+    "repository": "https://github.com/DonGPalmer/CNRS_Lean",
+    "version": "1.0.2",
+    "release_date": "2026-09-12",
+    "zenodo_concept_doi": "10.5281/zenodo.22726349"
+  },
+  "certified_source": {
+    "authority_repository": "DonGPalmer/SSC_Formal_Methods_CI",
+    "authority_visibility": "private",
+    "branch": "cnrs-lean-consolidated-release-candidate",
+    "commit": "07e776b4e1d7d09513394a4b676516eb51e4c597",
+    "tree": "fd61bac37369f8e3020d70141c565a4fba414a98",
+    "workflow_run": 34534566879,
+    "artifact_id": 10175389923,
+    "artifact_sha256": "840ffee8a9a1183292ef8c952fe81199b1d916ea0fd0e688602f19559a375c21",
+    "audit_verdict": "CAPSTONE PASS / CONSOLIDATED RELEASE GREEN",
+    "certification_date": "2026-09-10"
+  },
+  "public_export": {
+    "projects": [
+      "CNRSCore",
+      "CnrsQ2",
+      "CNRSArithmetic",
+      "CNRSIntegration",
+      "CNRSProblem1",
+      "CNRSProblem2"
+    ],
+    "project_count": 6,
+    "lean_file_count": 79,
+    "checksum_inventory": "SHA256SUMS.txt",
+    "checksum_scope": "All files within the six certified project directories, with paths relative to the repository root.",
+    "source_policy": "Certified project files are exported byte-for-byte; public-facing repository metadata is maintained separately."
+  },
+  "toolchain": {
+    "lean": "leanprover/lean4:v4.33.0",
+    "mathlib_commit": "db584cd6d46c92f209a44c0f1c829460d327499d"
+  },
+  "related_release": {
+    "toolkit_repository": "https://github.com/DonGPalmer/CNRS_Scientific_Toolkit",
+    "toolkit_version": "0.13.0",
+    "toolkit_path": "formal/lean"
+  }
+}

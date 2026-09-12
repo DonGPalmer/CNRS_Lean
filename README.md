@@ -60,15 +60,13 @@ per-layer `*_THEOREM_BOUNDARY_FROZEN.md` files state each layer's exact
 scope and exclusions in full — read those, not just this summary, before
 relying on a specific result.
 
-**On P2-L10 specifically**: a higher-level programme status document
-describes the whole formal-methods portfolio as governed through P2-L10.
-The project's own `CNRSProblem2/README.md`, which is more specific, states
-this more precisely: P2-L9 is the **authoritatively certified** baseline
-(cited against a specific commit and CI run), while P2-L10 is
-**"implementation complete, candidate certification pending."** This export
-carries P2-L10's actual Lean source either way — build it and check it
-yourself using the instructions below rather than taking either summary's
-word for it.
+**On P2-L10 specifically**: P2-L10 is included in the independently audited,
+governed GREEN consolidated capstone identified in [Provenance](#provenance).
+It proves the finite-support Hurwitz antiderivative within the frozen boundary
+stated by the project; it does not establish arbitrary infinite
+serialization, analytic continuation, or path reconstruction. Build the
+included source and inspect its theorem boundaries using the instructions
+below rather than extending the result beyond that certified scope.
 
 ## Axiom footprint
 
@@ -124,6 +122,10 @@ consolidated release, not pushed directly from the private development
 repository (`SSC_Formal_Methods_CI`), which remains private. What that
 means concretely:
 
+Machine-readable release identity is recorded in [`PROVENANCE.json`](PROVENANCE.json),
+and [`SHA256SUMS.txt`](SHA256SUMS.txt) inventories every file in the six
+certified project trees.
+
 - **Independently verifiable from this repo alone**: that the source
   compiles under the pinned Lean/Mathlib versions above, that it is
   genuinely free of `sorry`/`admit`/added `axiom`, and the exact
@@ -155,8 +157,8 @@ independently of the Toolkit's own release cadence.
 ## Citing this work
 
 See [`CITATION.cff`](CITATION.cff), or GitHub's "Cite this repository"
-button. Once this repository is connected to Zenodo, tagged releases here
-will mint their own version DOI automatically.
+button. The Zenodo concept DOI for all versions is
+[`10.5281/zenodo.22726349`](https://doi.org/10.5281/zenodo.22726349).
 
 ## License
 

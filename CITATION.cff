@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 title: "CNRS Lean: Formal Verification for the CNRS Programme"
-message: "If you use this formalization, please cite this repository's concept DOI once available, or this repository directly."
+message: "If you use this formalization, please cite the version used or the repository concept DOI."
 type: software
 authors:
   - family-names: Palmer
@@ -9,8 +9,12 @@ authors:
 repository-code: "https://github.com/DonGPalmer/CNRS_Lean"
 url: "https://www.ss-cnrs.nul1.com/"
 license: Apache-2.0
-version: "1.0.0"
-date-released: 2026-09-11
+version: "1.0.2"
+date-released: 2026-09-12
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.22726349"
+    description: "CNRS Lean concept DOI"
 keywords:
   - lean4
   - formal-verification
