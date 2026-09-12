@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 title: "CNRS Lean: Formal Verification for the CNRS Programme"
-message: "If you use this formalization, please cite the version used or the repository concept DOI."
+message: "If you use this formalization, please cite the version used or the repository concept DOI 10.5281/zenodo.22726349, or this repository directly."
 type: software
 authors:
   - family-names: Palmer
