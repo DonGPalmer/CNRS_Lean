@@ -1,9 +1,10 @@
+import CNRSIntegration.AdditionBridge
+import Mathlib.Tactic
+
 /-!
 CNRS-R1 working proof adapter for public Lean v1.0.3.
 No change to any adopted theorem or to the private E2 source.
 -/
-import CNRSIntegration.AdditionBridge
-import Mathlib.Tactic
 
 open Zsqrtd
 
