@@ -53,7 +53,7 @@ theorem parse_examples :
     parseFinite "1..2" = none ∧
     parseFinite "5" = none ∧
     parseFinite "-1" = none := by
-  decide
+  native_decide
 
 /-- Numerator digit word, in the least-significant-digit-first order. -/
 def spellingWord (s : FiniteSpelling) : List (Fin 5) :=
@@ -97,13 +97,13 @@ theorem zeroWord_value (n : ℕ) :
     CNRSArithmetic.wordValue (List.replicate n (0 : Fin 5)) = 0 := by
   induction n with
   | zero => rfl
-  | succ n ih => simp [CNRSArithmetic.wordValue, ih]
+  | succ n ih => simp [List.replicate_succ, CNRSCore.wordValue, ih]
 
 /-- Padding inserts low zero digits and multiplies the raw numerator
     by the corresponding power of the Gaussian base. -/
 theorem padWord_factor (s : FiniteSpelling) (depth : ℕ) :
     CNRSArithmetic.wordValue (padWord s depth) =
-      beta ^ (depth - s.fraction.length) *
+      CNRSCore.beta ^ (depth - s.fraction.length) *
         CNRSArithmetic.wordValue (spellingWord s) := by
   simp [padWord, CNRSCore.wordValue_append, zeroWord_value]
 
