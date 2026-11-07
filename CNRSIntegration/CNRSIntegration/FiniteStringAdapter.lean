@@ -107,4 +107,78 @@ theorem padWord_factor (s : FiniteSpelling) (depth : ℕ) :
         CNRSArithmetic.wordValue (spellingWord s) := by
   simp [padWord, CNRSCore.wordValue_append, zeroWord_value]
 
+
+/-- The base is nonzero in the exact Gaussian fraction field, proved
+    from its established nonzero five-adic norm. -/
+theorem betaFrac_ne_zero : CnrsQ2.betaFrac ≠ 0 := by
+  intro h
+  have hn : ‖CnrsQ2.fracToPadic CnrsQ2.betaFrac‖ = (5 : ℝ)⁻¹ := by
+    simpa [CnrsQ2.betaFrac] using CnrsQ2.norm_fracToPadic_beta
+  rw [h, map_zero, norm_zero] at hn
+  norm_num at hn
+
+/-- Fractional right-padding is exactly value-preserving in R_A. -/
+theorem padWord_value (s : FiniteSpelling) (depth : ℕ)
+    (h : s.fraction.length ≤ depth) :
+    CnrsQ2.evalFiniteLaurent depth (padWord s depth) = spellingValue s := by
+  have hk : depth - s.fraction.length + s.fraction.length = depth :=
+    Nat.sub_add_cancel h
+  unfold spellingValue CnrsQ2.evalFiniteLaurent
+  change
+    (algebraMap GaussianInt CnrsQ2.GaussianFrac
+       (CNRSArithmetic.wordValue (padWord s depth))) / CnrsQ2.betaFrac ^ depth =
+    (algebraMap GaussianInt CnrsQ2.GaussianFrac
+       (CNRSArithmetic.wordValue (spellingWord s))) / CnrsQ2.betaFrac ^ s.fraction.length
+  rw [padWord_factor, map_mul, map_pow]
+  change
+    CnrsQ2.betaFrac ^ (depth - s.fraction.length) *
+      (algebraMap GaussianInt CnrsQ2.GaussianFrac
+         (CNRSArithmetic.wordValue (spellingWord s))) / CnrsQ2.betaFrac ^ depth =
+    (algebraMap GaussianInt CnrsQ2.GaussianFrac
+       (CNRSArithmetic.wordValue (spellingWord s))) / CnrsQ2.betaFrac ^ s.fraction.length
+  have hpow : CnrsQ2.betaFrac ^ depth =
+    CnrsQ2.betaFrac ^ (depth - s.fraction.length) *
+      CnrsQ2.betaFrac ^ s.fraction.length := by
+    rw [← hk, pow_add]
+  rw [hpow]
+  field_simp [betaFrac_ne_zero] <;> ring
+
+/-- Composed, exact correctness theorem for accepted, typed CNRS strings,
+    including mixed lengths and all finite fractional offsets. -/
+theorem addFiniteStrings_value (a b : FiniteSpelling) :
+    let depth := max a.fraction.length b.fraction.length
+    CnrsQ2.evalFiniteLaurent depth
+        (CNRSArithmetic.addWords (padWord a depth) (padWord b depth)) =
+      spellingValue a + spellingValue b := by
+  dsimp
+  rw [addWord_at_depth,
+      padWord_value a _ (le_max_left _ _),
+      padWord_value b _ (le_max_right _ _)]
+
+/-- Leading integer zeros are value-neutral. -/
+theorem append_high_zero_value (xs : List (Fin 5)) :
+    CNRSArithmetic.wordValue (xs ++ [0]) = CNRSArithmetic.wordValue xs := by
+  simp [CNRSCore.wordValue_append]
+
+/-- Removing one fractional trailing zero and its denominator beta factor
+    is value-preserving, so repeated normalization is sound by induction. -/
+theorem drop_fraction_zero_value (depth : ℕ) (xs : List (Fin 5)) :
+    CnrsQ2.evalFiniteLaurent (depth + 1) (0 :: xs) =
+      CnrsQ2.evalFiniteLaurent depth xs := by
+  unfold CnrsQ2.evalFiniteLaurent
+  change
+    (algebraMap GaussianInt CnrsQ2.GaussianFrac
+      (CNRSArithmetic.wordValue (0 :: xs))) / CnrsQ2.betaFrac ^ (depth + 1) =
+    (algebraMap GaussianInt CnrsQ2.GaussianFrac
+      (CNRSArithmetic.wordValue xs)) / CnrsQ2.betaFrac ^ depth
+  simp only [CNRSCore.wordValue_cons, CNRSCore.digit_zero, zero_add, map_mul,
+    pow_succ]
+  change
+    CnrsQ2.betaFrac *
+      (algebraMap GaussianInt CnrsQ2.GaussianFrac (CNRSArithmetic.wordValue xs)) /
+      (CnrsQ2.betaFrac ^ depth * CnrsQ2.betaFrac) =
+    (algebraMap GaussianInt CnrsQ2.GaussianFrac (CNRSArithmetic.wordValue xs)) /
+      CnrsQ2.betaFrac ^ depth
+  field_simp [betaFrac_ne_zero] <;> ring
+
 end CNRSIntegration
