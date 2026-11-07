@@ -181,4 +181,97 @@ theorem drop_fraction_zero_value (depth : ℕ) (xs : List (Fin 5)) :
       CnrsQ2.betaFrac ^ depth
   field_simp [betaFrac_ne_zero]
 
+
+/-- Remove leading integer-side zeros from a most-significant-first digit list. -/
+def trimHigh : List (Fin 5) → List (Fin 5)
+  | [] => []
+  | d :: ds => if d = 0 then trimHigh ds else d :: ds
+
+/-- All leading integer-side zeros are value-neutral, not only one zero. -/
+theorem trimHigh_value (xs : List (Fin 5)) :
+    CNRSArithmetic.wordValue ((trimHigh xs).reverse) =
+      CNRSArithmetic.wordValue xs.reverse := by
+  induction xs with
+  | nil => rfl
+  | cons d ds ih =>
+      by_cases hd : d = 0
+      · subst d
+        simpa [trimHigh, append_high_zero_value] using ih
+      · simp [trimHigh, hd]
+
+/-- Remove fraction-side zeroes only while the fractional depth is positive. -/
+def trimLow : ℕ → List (Fin 5) → ℕ × List (Fin 5)
+  | 0, ds => (0, ds)
+  | depth + 1, [] => (0, [])
+  | depth + 1, d :: ds =>
+      if d = 0 then trimLow depth ds else (depth + 1, d :: ds)
+
+/-- All fractional trailing zeros are value-neutral, not only one zero. -/
+theorem trimLow_value (depth : ℕ) (ds : List (Fin 5)) :
+    CnrsQ2.evalFiniteLaurent (trimLow depth ds).1 (trimLow depth ds).2 =
+      CnrsQ2.evalFiniteLaurent depth ds := by
+  induction depth generalizing ds with
+  | zero => simp [trimLow]
+  | succ depth ih =>
+      cases ds with
+      | nil => simp [trimLow, CnrsQ2.evalFiniteLaurent, CnrsQ2.evalGaussianDigits]
+      | cons d tail =>
+          by_cases hd : d = 0
+          · subst d
+            change
+              CnrsQ2.evalFiniteLaurent (trimLow depth tail).1
+                (trimLow depth tail).2 =
+              CnrsQ2.evalFiniteLaurent (depth + 1) (0 :: tail)
+            exact (ih tail).trans (drop_fraction_zero_value depth tail).symm
+          · simp [trimLow, hd]
+
+/-- Numeric normalizer for a finite least-significant-first word with
+    an explicit count of fractional places. This is a mathematical specification
+    of the Python formatting operations, not an extraction of Python code. -/
+def normalizeWord (depth : ℕ) (ds : List (Fin 5)) : ℕ × List (Fin 5) :=
+  let p := trimLow depth ds
+  (p.1, (trimHigh p.2.reverse).reverse)
+
+/-- Complete numeric normalization preserves exact Gaussian-fraction value. -/
+theorem normalizeWord_value (depth : ℕ) (ds : List (Fin 5)) :
+    CnrsQ2.evalFiniteLaurent (normalizeWord depth ds).1
+      (normalizeWord depth ds).2 = CnrsQ2.evalFiniteLaurent depth ds := by
+  let p := trimLow depth ds
+  have hlow : CnrsQ2.evalFiniteLaurent p.1 p.2 =
+      CnrsQ2.evalFiniteLaurent depth ds := trimLow_value depth ds
+  calc
+    CnrsQ2.evalFiniteLaurent (normalizeWord depth ds).1
+        (normalizeWord depth ds).2 =
+      CnrsQ2.evalFiniteLaurent p.1 ((trimHigh p.2.reverse).reverse) := rfl
+    _ = CnrsQ2.evalFiniteLaurent p.1 p.2 := by
+      unfold CnrsQ2.evalFiniteLaurent
+      change
+        (algebraMap GaussianInt CnrsQ2.GaussianFrac
+          (CNRSArithmetic.wordValue ((trimHigh p.2.reverse).reverse))) /
+          CnrsQ2.betaFrac ^ p.1 =
+        (algebraMap GaussianInt CnrsQ2.GaussianFrac
+          (CNRSArithmetic.wordValue p.2)) / CnrsQ2.betaFrac ^ p.1
+      have hw := trimHigh_value p.2.reverse
+      simpa only [List.reverse_reverse] using
+        congrArg
+          (fun v : GaussianInt =>
+            (algebraMap GaussianInt CnrsQ2.GaussianFrac v) / CnrsQ2.betaFrac ^ p.1)
+          hw
+    _ = CnrsQ2.evalFiniteLaurent depth ds := hlow
+
+/-- Finite exact addition followed by numeric canonical normalization. -/
+def addNormalized (a b : FiniteSpelling) : ℕ × List (Fin 5) :=
+  let depth := max a.fraction.length b.fraction.length
+  normalizeWord depth (CNRSArithmetic.addWords (padWord a depth) (padWord b depth))
+
+/-- The composed string/offset/alignment/addition/normalization value theorem. -/
+theorem addNormalized_value (a b : FiniteSpelling) :
+    CnrsQ2.evalFiniteLaurent (addNormalized a b).1 (addNormalized a b).2 =
+      spellingValue a + spellingValue b := by
+  exact (normalizeWord_value (max a.fraction.length b.fraction.length)
+    (CNRSArithmetic.addWords
+      (padWord a (max a.fraction.length b.fraction.length))
+      (padWord b (max a.fraction.length b.fraction.length)))).trans
+      (addFiniteStrings_value a b)
+
 end CNRSIntegration
