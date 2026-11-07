@@ -97,7 +97,7 @@ theorem zeroWord_value (n : ℕ) :
     CNRSArithmetic.wordValue (List.replicate n (0 : Fin 5)) = 0 := by
   induction n with
   | zero => rfl
-  | succ n ih => simp [List.replicate_succ, CNRSCore.wordValue, ih]
+  | succ n ih => simp [List.replicate_succ, ih]
 
 /-- Padding inserts low zero digits and multiplies the raw numerator
     by the corresponding power of the Gaussian base. -/
@@ -114,7 +114,7 @@ theorem betaFrac_ne_zero : CnrsQ2.betaFrac ≠ 0 := by
   intro h
   have hn : ‖CnrsQ2.fracToPadic CnrsQ2.betaFrac‖ = (5 : ℝ)⁻¹ := by
     simpa [CnrsQ2.betaFrac] using CnrsQ2.norm_fracToPadic_beta
-  rw [h, map_zero, norm_zero] at hn
+  rw [h, map_zero] at hn
   norm_num at hn
 
 /-- Fractional right-padding is exactly value-preserving in R_A. -/
@@ -139,7 +139,7 @@ theorem padWord_value (s : FiniteSpelling) (depth : ℕ)
   have hpow : CnrsQ2.betaFrac ^ depth =
     CnrsQ2.betaFrac ^ (depth - s.fraction.length) *
       CnrsQ2.betaFrac ^ s.fraction.length := by
-    rw [← hk, pow_add]
+    simpa only [hk] using (pow_add CnrsQ2.betaFrac (depth - s.fraction.length) s.fraction.length)
   rw [hpow]
   field_simp [betaFrac_ne_zero] <;> ring
 
@@ -179,6 +179,6 @@ theorem drop_fraction_zero_value (depth : ℕ) (xs : List (Fin 5)) :
       (CnrsQ2.betaFrac ^ depth * CnrsQ2.betaFrac) =
     (algebraMap GaussianInt CnrsQ2.GaussianFrac (CNRSArithmetic.wordValue xs)) /
       CnrsQ2.betaFrac ^ depth
-  field_simp [betaFrac_ne_zero] <;> ring
+  field_simp [betaFrac_ne_zero]
 
 end CNRSIntegration
