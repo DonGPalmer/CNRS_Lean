@@ -114,4 +114,10 @@ theorem UniformCoefficientBudget.summable_evaluation
       mul_le_mul_of_nonneg_left hpow (norm_nonneg (a n))
     _ = ‖a n‖ := by ring
 
+#print axioms UniformCoefficientBudget.tail_le
+#print axioms UniformCoefficientBudget.evaluation_tail
+#print axioms UniformCoefficientBudget.summable_norm
+#print axioms UniformCoefficientBudget.summable_coeff
+#print axioms UniformCoefficientBudget.summable_evaluation
+
 end CNRSProblem2
