@@ -83,4 +83,63 @@ theorem msdRankedCertificate_noPolicy
   exact rankedObstruction_noOnlinePolicy inside (msdDivisionStep v)
     rank adversarialInput ⟨(0, 0), h0⟩ hdecrease
 
+/-- A ranked deletion witness is sound even if the *allowable disk* contains
+    states that survived pruning.
+
+    `eliminated s` means that a finite pruning certificate has assigned a
+    positive deletion rank to `s`. `allowed s` denotes any state within the
+    confinement region. At an eliminated state, the adversarial input
+    guarantees that each output either leaves the allowable region or leads
+    to an eliminated successor of strictly smaller rank.
+
+    If the initial state is eliminated, no deterministic or nondeterministic
+    total online policy can stay within the allowable region from every
+    allowed state. Unlike the weaker theorem above, this explicitly
+    separates *eliminated* states from the entire allowable region. -/
+theorem rankedDeletion_fromSeed_noOnlinePolicy {State : Type}
+    (allowed eliminated : State → Prop)
+    (advance : State → Fin 5 → Fin 5 → State)
+    (rank : State → ℕ)
+    (adversarialInput : State → Fin 5)
+    (seed : State)
+    (hseed : eliminated seed)
+    (hsub : ∀ s, eliminated s → allowed s)
+    (hdecrease : ∀ s, eliminated s →
+      ∀ d : Fin 5, allowed (advance s (adversarialInput s) d) →
+        eliminated (advance s (adversarialInput s) d) ∧
+          rank (advance s (adversarialInput s) d) < rank s) :
+    ¬ HasOnlineRemainderPolicy allowed advance := by
+  intro hpolicy
+  have hnone : ∀ n : ℕ, ∀ s : State, rank s = n → ¬ eliminated s := by
+    intro n
+    induction n using Nat.strong_induction_on with
+    | h n ih =>
+      intro s hs hdeleted
+      obtain ⟨d, hnext⟩ := hpolicy s (hsub s hdeleted) (adversarialInput s)
+      obtain ⟨hdeletedNext, hltRaw⟩ := hdecrease s hdeleted d hnext
+      have hlt : rank (advance s (adversarialInput s) d) < n := by
+        simpa [hs] using hltRaw
+      exact ih (rank (advance s (adversarialInput s) d)) hlt
+        (advance s (adversarialInput s) d) rfl hdeletedNext
+  exact hnone (rank seed) seed rfl hseed
+
+/-- Concrete Gaussian-integer recurrence version, with the origin as seed.
+    The only outstanding work for a particular divisor is supplying
+    `allowed`, `eliminated`, the rank, and validating all five transitions. -/
+theorem msdDeletionCertificate_noPolicy
+    (v : GaussianRemainder)
+    (allowed eliminated : GaussianRemainder → Prop)
+    (rank : GaussianRemainder → ℕ)
+    (adversarialInput : GaussianRemainder → Fin 5)
+    (hzero : eliminated (0, 0))
+    (hsub : ∀ s, eliminated s → allowed s)
+    (hdecrease : ∀ s, eliminated s →
+      ∀ d : Fin 5, allowed (msdDivisionStep v s (adversarialInput s) d) →
+        eliminated (msdDivisionStep v s (adversarialInput s) d) ∧
+          rank (msdDivisionStep v s (adversarialInput s) d) < rank s) :
+    ¬ HasOnlineRemainderPolicy allowed (msdDivisionStep v) := by
+  exact rankedDeletion_fromSeed_noOnlinePolicy allowed eliminated
+    (msdDivisionStep v) rank adversarialInput (0, 0) hzero hsub hdecrease
+
+
 end CNRSArithmetic
