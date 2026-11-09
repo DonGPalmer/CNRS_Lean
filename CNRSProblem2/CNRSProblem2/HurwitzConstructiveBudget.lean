@@ -37,7 +37,6 @@ theorem hurwitzRec_normalized_norm_le_geometric
           (n.factorial : ℝ) := by
     rw [norm_div, norm_mul, norm_pow]
     simp [Complex.norm_real, abs_of_nonneg hR]
-    ring
   rw [hnorm]
   calc
     ‖hurwitzRecCoeff a n‖ * R^n / (n.factorial : ℝ) ≤
