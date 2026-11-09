@@ -69,14 +69,35 @@ theorem minusOne_all_deleted_transitions :
     norm_num [msdDivisionStep, minusOneInside, minusOneDeleted,
       minusOneRank, minusOneAdversary] at *
 
+/-- The 15-node certificate rules out every controlled-invariant subset of the
+    radius-eight disk containing the origin. Unlike the full-disk no-policy
+    corollary, this theorem genuinely uses the ranked deletion certificate. -/
+theorem minusOne_no_viable_set_in_disk (W : GaussianRemainder → Prop)
+    (h0 : W (0, 0))
+    (hsub : ∀ s, W s → minusOneInside s)
+    (hW : HasOnlineRemainderPolicy W (msdDivisionStep (-1, 0))) : False := by
+  have hdesc : ∀ s, (minusOneDeleted s ∧ W s) →
+      ∀ d : Fin 5, W (msdDivisionStep (-1, 0) s (minusOneAdversary s) d) →
+        (minusOneDeleted (msdDivisionStep (-1, 0) s (minusOneAdversary s) d) ∧
+          W (msdDivisionStep (-1, 0) s (minusOneAdversary s) d)) ∧
+        minusOneRank (msdDivisionStep (-1, 0) s (minusOneAdversary s) d) <
+          minusOneRank s := by
+    intro s hs d hd
+    obtain ⟨hdel, hrank⟩ :=
+      minusOne_all_deleted_transitions s hs.1 d (hsub _ hd)
+    exact ⟨⟨hdel, hd⟩, hrank⟩
+  exact msdDeletionCertificate_noPolicy (-1, 0) W
+    (fun s => minusOneDeleted s ∧ W s)
+    minusOneRank minusOneAdversary
+    ⟨minusOne_origin_deleted, h0⟩ (fun s hs => hs.2) hdesc hW
+
 /-- No canonical MSD-first online-output policy can remain in the complete
     radius-8 disk for divisor -1, delay zero. This is an exact finite
     special-case theorem, not the general P4 conjecture. -/
 theorem minusOne_no_online_policy_disk :
     ¬ HasOnlineRemainderPolicy minusOneInside (msdDivisionStep (-1, 0)) := by
-  exact msdDeletionCertificate_noPolicy (-1, 0)
-    minusOneInside minusOneDeleted minusOneRank minusOneAdversary
-    minusOne_origin_deleted minusOne_deleted_in_disk
-    minusOne_all_deleted_transitions
+  intro h
+  exact minusOne_no_viable_set_in_disk minusOneInside
+    (by norm_num [minusOneInside]) (fun _ hinside => hinside) h
 
 end CNRSArithmetic
