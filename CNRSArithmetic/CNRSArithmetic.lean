@@ -45,3 +45,4 @@ import CNRSArithmetic.DivisionOutcomeRepresentativeIntegrity
 import CNRSArithmetic.OnlineMultiplicationImpossibility
 import CNRSArithmetic.MSDRankedObstruction
 import CNRSArithmetic.MSDMinusOneCertificate
+import CNRSArithmetic.MSDMinusOneDiskGrowth
