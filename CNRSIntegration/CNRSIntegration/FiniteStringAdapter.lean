@@ -53,7 +53,7 @@ theorem parse_examples :
     parseFinite "1..2" = none ∧
     parseFinite "5" = none ∧
     parseFinite "-1" = none := by
-  decide
+  native_decide
 
 /-- Numerator digit word, in the least-significant-digit-first order. -/
 def spellingWord (s : FiniteSpelling) : List (Fin 5) :=
