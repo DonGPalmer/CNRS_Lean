@@ -65,4 +65,25 @@ theorem finite_complex_tail_majorant
           mul_le_mul_of_nonneg_left hpow (norm_nonneg _)
         _ = q ^ (N + 1) * ‖c n‖ := by ring
 
+/-- The finite complex tail estimate holds for a genuinely complex
+    argument z in the closed unit disk. This is still a finite-index
+    estimate, not infinite-series convergence. -/
+theorem finite_complex_tail_majorant_z
+    (c : ℕ → ℂ) (N M : ℕ) (z : ℂ) (hz : ‖z‖ ≤ 1) :
+    ‖∑ n ∈ Finset.Icc (N + 1) M, c n * z ^ n‖ ≤
+      ‖z‖ ^ (N + 1) * ∑ n ∈ Finset.Icc (N + 1) M, ‖c n‖ := by
+  calc
+    ‖∑ n ∈ Finset.Icc (N + 1) M, c n * z ^ n‖ ≤
+        ∑ n ∈ Finset.Icc (N + 1) M, ‖c n * z ^ n‖ :=
+      norm_sum_le _ _
+    _ ≤ ∑ n ∈ Finset.Icc (N + 1) M, ‖z‖ ^ (N + 1) * ‖c n‖ := by
+      apply Finset.sum_le_sum
+      intro n hn
+      have hn' : N + 1 ≤ n := (Finset.mem_Icc.mp hn).1
+      rw [norm_mul, norm_pow, mul_comm]
+      exact mul_le_mul_of_nonneg_right
+        (pow_le_pow_of_le_one (norm_nonneg z) hz hn') (norm_nonneg _)
+    _ = ‖z‖ ^ (N + 1) *
+        ∑ n ∈ Finset.Icc (N + 1) M, ‖c n‖ := by rw [Finset.mul_sum]
+
 end CNRSProblem2
