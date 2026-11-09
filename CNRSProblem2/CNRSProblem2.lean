@@ -21,6 +21,7 @@ import CNRSProblem2.HurwitzBudgetBridge
 import CNRSProblem2.HurwitzRecurrenceGrowth
 import CNRSProblem2.HurwitzBlockDecay
 import CNRSProblem2.HurwitzFactorialMajorant
+import CNRSProblem2.HurwitzConstructiveBudget
 
 /-!
 CNRS Problem 2 formalization.
