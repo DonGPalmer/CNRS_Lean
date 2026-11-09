@@ -106,4 +106,29 @@ theorem finiteHurwitzWeightedNorm_single_mul_single
       rw [hurwitz_factorial_weight]
       ring
 
+/-- Norm of each actual output coefficient is bounded by the full
+finite pairwise contribution budget at that degree. This is the first
+aggregation estimate needed to lift the pair identity to a global norm. -/
+theorem finiteHurwitzCoeffNorm_le_pairSum
+    (x y : FiniteHurwitz ℂ) (n : ℕ) :
+    ‖(x * y) n‖ ≤
+      ∑ i ∈ x.coeff.support, ∑ j ∈ y.coeff.support,
+        ‖if i + j = n then
+            (i + j).choose i • (x i * y j) else (0 : ℂ)‖ := by
+  rw [FiniteHurwitz.coeff_mul_support]
+  calc
+    ‖∑ i ∈ x.coeff.support, ∑ j ∈ y.coeff.support,
+        if i + j = n then (i + j).choose i • (x i * y j)
+        else (0 : ℂ)‖ ≤
+      ∑ i ∈ x.coeff.support,
+        ‖∑ j ∈ y.coeff.support,
+          if i + j = n then (i + j).choose i • (x i * y j)
+          else (0 : ℂ)‖ := norm_sum_le _ _
+    _ ≤ ∑ i ∈ x.coeff.support, ∑ j ∈ y.coeff.support,
+          ‖if i + j = n then
+              (i + j).choose i • (x i * y j) else (0 : ℂ)‖ := by
+      apply Finset.sum_le_sum
+      intro i hi
+      exact norm_sum_le _ _
+
 end CNRSProblem2
