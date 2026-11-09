@@ -36,7 +36,6 @@ theorem hurwitz_factorial_weight (i j : ℕ) (R : ℝ) :
   apply (div_eq_iff hij).2
   rw [← hc]
   field_simp
-  ring
 
 /-- Exact product factorization for the factorially weighted absolute
 contributions to a finite Hurwitz convolution, before degree aggregation. -/
