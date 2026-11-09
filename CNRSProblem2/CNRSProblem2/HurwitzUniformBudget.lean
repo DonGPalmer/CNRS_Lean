@@ -1,5 +1,7 @@
 import CNRSProblem2.HurwitzProductBudget
 import CNRSProblem2.HurwitzWeightedCertificate
+import Mathlib.Topology.Algebra.InfiniteSum.Real
+import Mathlib.Analysis.Normed.Group.InfiniteSum
 import Mathlib.Tactic
 
 /-!
@@ -65,5 +67,51 @@ theorem UniformCoefficientBudget.bound_nonneg
     intro n hn
     exact norm_nonneg _
   exact le_trans hn h
+
+/-- A uniform bound on ALL initial partial sums implies absolute
+summability of the normalized coefficient family. Unlike a per-jet bound,
+this establishes an infinite-series property. -/
+theorem UniformCoefficientBudget.summable_norm
+    (a : ℕ → ℂ) (cert : UniformCoefficientBudget a) :
+    Summable (fun n : ℕ => ‖a n‖) := by
+  apply summable_of_sum_le (fun n => norm_nonneg (a n))
+  intro u
+  let M : ℕ := u.sup id
+  have hsub : u ⊆ Finset.Icc 0 M := by
+    intro n hn
+    have hle : n ≤ M := by
+      change n ≤ u.sup id
+      exact Finset.le_sup hn
+    exact Finset.mem_Icc.mpr ⟨Nat.zero_le n, hle⟩
+  have hsum :
+      (∑ n ∈ u, ‖a n‖) ≤
+      (∑ n ∈ Finset.Icc 0 M, ‖a n‖) := by
+    apply Finset.sum_le_sum_of_subset_of_nonneg hsub
+    intro n hn hnot
+    exact norm_nonneg _
+  exact le_trans hsum (cert.all_partial M)
+
+/-- The normalized complex coefficient series converges absolutely. -/
+theorem UniformCoefficientBudget.summable_coeff
+    (a : ℕ → ℂ) (cert : UniformCoefficientBudget a) : Summable a :=
+  Summable.of_norm (cert.summable_norm a)
+
+/-- On the closed complex unit disk, the normalized coefficient series
+remains absolutely summable. This is an actual infinite-series convergence
+statement, conditional on the all-order certified coefficient budget. -/
+theorem UniformCoefficientBudget.summable_evaluation
+    (a : ℕ → ℂ) (cert : UniformCoefficientBudget a)
+    (z : ℂ) (hz : ‖z‖ ≤ 1) :
+    Summable (fun n : ℕ => a n * z ^ n) := by
+  apply Summable.of_norm_bounded (cert.summable_norm a)
+  intro n
+  rw [norm_mul, norm_pow]
+  have hpow : ‖z‖ ^ n ≤ 1 := by
+    simpa using
+      (pow_le_pow_of_le_one (norm_nonneg z) hz (Nat.zero_le n))
+  calc
+    ‖a n‖ * ‖z‖ ^ n ≤ ‖a n‖ * 1 :=
+      mul_le_mul_of_nonneg_left hpow (norm_nonneg (a n))
+    _ = ‖a n‖ := by ring
 
 end CNRSProblem2
