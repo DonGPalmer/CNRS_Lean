@@ -11,6 +11,9 @@ import CNRSProblem2.FiniteHurwitzAntiderivative
 import CNRSProblem2.NonabelianMonodromy
 import CNRSProblem2.HurwitzFiniteTailMajorant
 import CNRSProblem2.HurwitzComplexTail
+import CNRSProblem2.HurwitzWeightedCertificate
+import CNRSProblem2.HurwitzFiniteNorm
+import CNRSProblem2.HurwitzConvolutionNorm
 
 /-!
 CNRS Problem 2 formalization.
