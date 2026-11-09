@@ -8,6 +8,7 @@ import CNRSProblem2.BranchTransport
 import CNRSProblem2.BranchOrbit
 import CNRSProblem2.CNRSIntegration
 import CNRSProblem2.FiniteHurwitzAntiderivative
+import CNRSProblem2.NonabelianMonodromy
 
 /-!
 CNRS Problem 2 formalization.
