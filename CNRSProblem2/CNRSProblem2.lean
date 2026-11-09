@@ -8,6 +8,7 @@ import CNRSProblem2.BranchTransport
 import CNRSProblem2.BranchOrbit
 import CNRSProblem2.CNRSIntegration
 import CNRSProblem2.FiniteHurwitzAntiderivative
+import CNRSProblem2.NonabelianMonodromy
 
 /-!
 CNRS Problem 2 formalization.
@@ -39,4 +40,3 @@ P2-L10 adds a chosen-constant finite Hurwitz antiderivative, exact two-sided
 reversal with differentiation, fail-closed serialized operations, and branch,
 transport, attachment, and relative-pair compatibility.
 -/
-import CNRSProblem2.NonabelianMonodromy
