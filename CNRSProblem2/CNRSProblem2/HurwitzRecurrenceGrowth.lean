@@ -48,6 +48,29 @@ The parameter may in particular be the exact value β⁻¹. -/
 noncomputable def exactHurwitzRecCoeff (a : RAValue) (n : ℕ) : RAValue :=
   hurwitzRecCoeff a n
 
+/-- The canonical exact CNRS coefficient β⁻¹ belongs to R_A by the
+finite Laurent localization definition. No approximate complex value enters. -/
+noncomputable def betaInverseExact : RAValue :=
+  ⟨(1 : CnrsQ2.GaussianFrac) / CnrsQ2.betaFrac,
+    ⟨(1 : GaussianInt), 1, by simp⟩⟩
+
+/-- The canonical second-order CNRS-H example, as an exact R_A sequence. -/
+noncomputable def betaHurwitzCoeff (n : ℕ) : RAValue :=
+  exactHurwitzRecCoeff betaInverseExact n
+
+@[simp] theorem betaHurwitzCoeff_zero : betaHurwitzCoeff 0 = 1 := rfl
+
+@[simp] theorem betaHurwitzCoeff_one :
+    betaHurwitzCoeff 1 = betaInverseExact := by
+  simp [betaHurwitzCoeff, exactHurwitzRecCoeff]
+
+/-- The exact CNRS-H recurrence with β⁻¹, valid at every order. -/
+theorem betaHurwitzCoeff_recurrence (n : ℕ) :
+    betaHurwitzCoeff (n + 2) =
+      betaInverseExact * betaHurwitzCoeff (n + 1) +
+        (↑(n + 1) : RAValue) * betaHurwitzCoeff n := by
+  exact hurwitzRecCoeff_succ_succ betaInverseExact n
+
 /-- For complex coefficients, every recurrence value is dominated by
 the companion nonnegative real recurrence. -/
 theorem hurwitzRecCoeff_norm_majorized (a : ℂ) (n : ℕ) :
