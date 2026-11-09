@@ -7,10 +7,12 @@ system in base $z_0 = -2+i$ developed as part of the
 Independent researcher: Donald G. Palmer
 ([ORCID 0000-0003-4335-5533](https://orcid.org/0000-0003-4335-5533)).
 
-This repository is a curated export of a verified, immutable release. It is
-not a live mirror of the private CI/development repository — see
-[Provenance](#provenance) below for exactly what that does and does not mean
-for trusting the claims here.
+This repository began as a curated export of a verified, immutable release.
+Since 9 November 2026, the public `main` branch also contains separately
+reviewed, CI-checked **post-v1.0.3 development integrations**. The historical
+release and its checksum manifest remain an unchanged release baseline; the
+current branch is not byte-identical to that original release or to the
+Toolkit's historical vendored copy. See [Provenance](#provenance) below.
 
 ## Environment
 
@@ -51,6 +53,10 @@ statements of the informal paper's claims.
 | CNRS Problem 2, Capstone | `CNRSProblem2` | Proved, finite scope | P2-L1–L10; no analytic continuation or path reconstruction |
 | CNRS Problem 3 | `CNRSArithmetic`, `CNRSIntegration` | Partially proved | Addition and certified division outcomes proved; unrestricted online multiplication proved **impossible** in the governed model; streaming division is open |
 | CNRS Problem 4 | `CNRSCore`, `CNRSArithmetic`, `CNRSProblem1` | Partially proved | Finite operational kernel only; no general complex-representation completeness theorem |
+| CNRS R1 post-release | `CNRSIntegration` | Proved, finite Lean-specification scope | Finite-string addition and normalization preserve value; Python equivalence and parser completeness unproved |
+| CNRS Problem 4 post-release | `CNRSArithmetic` | Proved, restricted no-go | Divisor −1, zero delay, digits 0–4: no finite invariant remainder set containing zero; does not cover arbitrary online algorithms |
+| CNRS Problem 2 multi-sheet branch states post-release | `CNRSProblem2` | Proved, conditional algebraic scope | Nonabelian S₃ monodromy cannot be faithfully replaced by commuting additive labels; a specific analytic cubic cover not formalized |
+| CNRS-H finite tail post-release | `CNRSProblem2` | Proved, finite scope | Real and complex finite tail majorant bounds only; no all-index majorant or infinite convergence proof |
 
 **What is explicitly *not* claimed**, programme-wide: arbitrary infinite-series
 serialization, analytic continuation or path reconstruction, unequal-branch
@@ -79,11 +85,11 @@ per project rather than asserted in aggregate:
 | `CNRSCore` | 80 | `nextQuotient3_height_lt` (a termination lemma closing finitely many small-integer case splits) |
 | `CnrsQ2` | 37, independent of Core's | `gaussianIterate_five_eq_zero_of_norm_lt_eleven` |
 | `CNRSArithmetic` | 81 (80 inherited + 1 local) | Phase F capstone (the online-multiplication impossibility theorem) |
-| `CNRSIntegration` | 2–4 per theorem | Inherited from `CNRSArithmetic`'s carry-set lemmas |
+| `CNRSIntegration` | 2–4 per addition theorem; one local example axiom | Addition theorems inherit `CNRSArithmetic` carry-set axioms; `parse_examples` adds one local `native_decide` axiom |
 | `CNRSProblem1` | **0** | — |
 | `CNRSProblem2` | 80, inherited | `CNRSCore`, via the L9/L10 codec layers |
 
-**Pending PR #1 qualification (not part of published v1.0.3):** `CNRSIntegration.FiniteStringAdapter.parse_examples` additionally uses one *local* `native_decide` axiom (`parse_examples._native.native_decide.ax_1_1`) to check eight finite parser examples. This is distinct from the 2–4 inherited addition-carry axioms in the table above. The `addFiniteStrings_value`, `addNormalized_value`, and `addDisplay_value` proof chains still inherit the existing arithmetic carry-set axioms; they are *not* a proof that Python parser or formatter code implements the Lean functions. The concrete footprint can be inspected with `#print axioms CNRSIntegration.parse_examples`. No new foundational arithmetic axiom is introduced.
+**Post-v1.0.3 integration #1 qualification (not part of the v1.0.3 release):** `CNRSIntegration.FiniteStringAdapter.parse_examples` additionally uses one *local* `native_decide` axiom (`parse_examples._native.native_decide.ax_1_1`) to check eight finite parser examples. This is distinct from the 2–4 inherited addition-carry axioms in the table above. The `addFiniteStrings_value`, `addNormalized_value`, and `addDisplay_value` proof chains still inherit the existing arithmetic carry-set axioms; they are *not* a proof that Python parser or formatter code implements the Lean functions. The concrete footprint can be inspected with `#print axioms CNRSIntegration.parse_examples`. No new foundational arithmetic axiom is introduced.
 
 All `native_decide` uses here close finitely many concrete small-integer
 case splits (bounded decision procedures), not open-ended semantic content —
@@ -119,14 +125,17 @@ open an issue.)
 
 ## Provenance
 
-This repository was exported from an immutable, internally-verified
-consolidated release, not pushed directly from the private development
-repository (`SSC_Formal_Methods_CI`), which remains private. What that
-means concretely:
+The original v1.0.3 repository was exported from an immutable,
+internally-verified consolidated release, not pushed directly from the
+private development repository (`SSC_Formal_Methods_CI`), which remains
+private. Subsequent November 2026 PR integrations are independently
+inspectable public development commits, **not** part of that immutable
+snapshot or a new publication. What the original provenance means concretely:
 
-Machine-readable release identity is recorded in [`PROVENANCE.json`](PROVENANCE.json),
-and [`SHA256SUMS.txt`](SHA256SUMS.txt) inventories every file in the six
-certified project trees.
+Machine-readable identity for the original release is recorded in
+[`PROVENANCE.json`](PROVENANCE.json), and [`SHA256SUMS.txt`](SHA256SUMS.txt)
+inventories its six certified project trees **at that release**, not the
+post-release additions to `main`.
 
 - **Independently verifiable from this repo alone**: that the source
   compiles under the pinned Lean/Mathlib versions above, that it is
@@ -147,12 +156,13 @@ reproducible, not repeated because an earlier document said so.
 
 The [CNRS Scientific Toolkit](https://github.com/DonGPalmer/CNRS_Scientific_Toolkit)
 is the Python research-software implementation of CNRS arithmetic. Its
-v0.13.0 release vendors this exact same certified snapshot under
+v0.13.0 release vendors that historical certified snapshot under
 `formal/lean/` (same artifact SHA-256:
 `840ffee8a9a1183292ef8c952fe81199b1d916ea0fd0e688602f19559a375c21`) so that
-Toolkit users have the formal guarantees bundled alongside the software they
-are using — Python itself remains independently implemented, not
-Lean-extracted. This repository is the dedicated counterpart: a permanent,
+Toolkit users have the original formal guarantees bundled alongside the
+software they are using — Python itself remains independently implemented,
+not Lean-extracted. Later post-v1.0.3 `CNRS_Lean` development commits are
+**not** certified as vendored into that Toolkit release. This repository is the dedicated counterpart: a permanent,
 directly-citable home for the formalization on its own terms, versioned
 independently of the Toolkit's own release cadence.
 
