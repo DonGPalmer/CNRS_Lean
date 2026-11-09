@@ -37,7 +37,7 @@ def minusOneDeleted (r : GaussianRemainder) : Prop :=
 
 def minusOneRank (r : GaussianRemainder) : ℕ :=
   if r = (0, 0) then 3 else if (r = (3, 0) ∨ r = (4, 0) ∨ r = (5, 0)) then 2
-  else if minusOneDeleted r then 1 else 0
+  else 1
 
 def minusOneAdversary (r : GaussianRemainder) : Fin 5 :=
   if r = (0, 0) then 3 else 0
