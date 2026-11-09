@@ -11,7 +11,7 @@ invariant remainder set containing zero. The proved finite-invariant
 obstruction therefore rules out such a machine.
 
 This theorem does NOT formalize that every correct online algorithm must
-admit such a finite state description, or cover positive delay or other
+have such a finite state description, or cover positive delay or other
 divisors. The recurrence-preservation condition is an explicit hypothesis.
 -/
 
