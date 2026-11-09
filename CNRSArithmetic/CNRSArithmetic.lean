@@ -47,3 +47,4 @@ import CNRSArithmetic.MSDRankedObstruction
 import CNRSArithmetic.MSDMinusOneCertificate
 import CNRSArithmetic.MSDMinusOneDiskGrowth
 import CNRSArithmetic.MSDMinusOneFiniteInvariant
+import CNRSArithmetic.MSDMinusOneFiniteState
