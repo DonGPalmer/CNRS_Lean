@@ -32,10 +32,7 @@ theorem minusOne_outside_disk_strict_growth
       (show (0 : ℤ) ≤ 8 + q by omega)]
   have hxSq : 0 ≤ (r.1 - q) * (r.1 - q) := mul_self_nonneg _
   have hySq : 0 ≤ (2 * r.2 - q) * (2 * r.2 - q) := mul_self_nonneg _
-  change r.1 * r.1 + r.2 * r.2 <
-    (-2 * r.1 - r.2 + (a.val : ℤ) + (d.val : ℤ)) *
-      (-2 * r.1 - r.2 + (a.val : ℤ) + (d.val : ℤ)) +
-    (r.1 - 2 * r.2) * (r.1 - 2 * r.2)
+  dsimp [msdNormSq, msdDivisionStep]
   dsimp [q] at hxSq hySq hqSq
   dsimp [msdNormSq] at houtside
   nlinarith [hxSq, hySq, hqSq]
