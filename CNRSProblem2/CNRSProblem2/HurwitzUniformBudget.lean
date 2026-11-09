@@ -81,7 +81,7 @@ theorem UniformCoefficientBudget.summable_norm
     intro n hn
     have hle : n ≤ M := by
       change n ≤ u.sup id
-      exact Finset.le_sup hn
+      exact Finset.le_sup (f := id) hn
     exact Finset.mem_Icc.mpr ⟨Nat.zero_le n, hle⟩
   have hsum :
       (∑ n ∈ u, ‖a n‖) ≤
