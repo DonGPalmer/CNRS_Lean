@@ -41,19 +41,21 @@ theorem finiteHurwitzWeightedNorm_add_le
       ∑ n ∈ S, ‖z n‖ * (R ^ n / n.factorial) := by
     apply Finset.sum_subset hsub
     intro n hn hnot
-    have hzero : z n = 0 := Finsupp.not_mem_support_iff.mp hnot
+    have hzero : z n = 0 := by
+      by_contra hnonzero
+      exact hnot (Finsupp.mem_support_iff.mpr hnonzero)
     simp [hzero]
   have hx : x.coeff.support ⊆ S := Finset.subset_union_left
   have hy : y.coeff.support ⊆ S := Finset.subset_union_right
   have hxy : (x + y).coeff.support ⊆ S := by
     intro n hn
     by_contra hnot
-    have hnx : x n = 0 :=
-      Finsupp.not_mem_support_iff.mp (by
-        intro h; exact hnot (Finset.mem_union_left _ h))
-    have hny : y n = 0 :=
-      Finsupp.not_mem_support_iff.mp (by
-        intro h; exact hnot (Finset.mem_union_right _ h))
+    have hnx : x n = 0 := by
+      by_contra hnonzero
+      exact hnot (Finset.mem_union_left _ (Finsupp.mem_support_iff.mpr hnonzero))
+    have hny : y n = 0 := by
+      by_contra hnonzero
+      exact hnot (Finset.mem_union_right _ (Finsupp.mem_support_iff.mpr hnonzero))
     have hnzero : (x + y) n = 0 := by simp [hnx, hny]
     exact (Finsupp.mem_support_iff.mp hn) hnzero
   unfold finiteHurwitzWeightedNorm
