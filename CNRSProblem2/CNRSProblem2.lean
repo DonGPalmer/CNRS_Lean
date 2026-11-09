@@ -9,6 +9,8 @@ import CNRSProblem2.BranchOrbit
 import CNRSProblem2.CNRSIntegration
 import CNRSProblem2.FiniteHurwitzAntiderivative
 import CNRSProblem2.NonabelianMonodromy
+import CNRSProblem2.HurwitzFiniteTailMajorant
+import CNRSProblem2.HurwitzComplexTail
 
 /-!
 CNRS Problem 2 formalization.
