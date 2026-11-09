@@ -14,6 +14,8 @@ import CNRSProblem2.HurwitzComplexTail
 import CNRSProblem2.HurwitzWeightedCertificate
 import CNRSProblem2.HurwitzFiniteNorm
 import CNRSProblem2.HurwitzConvolutionNorm
+import CNRSProblem2.HurwitzProductBudget
+import CNRSProblem2.HurwitzNormAxiomAudit
 
 /-!
 CNRS Problem 2 formalization.
