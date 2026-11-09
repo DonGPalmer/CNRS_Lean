@@ -1,1 +1,3 @@
 import CNRSIntegration.AdditionBridge
+import CNRSIntegration.FiniteStringAdapter
+import CNRSIntegration.FiniteStringDisplay
