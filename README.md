@@ -54,7 +54,7 @@ statements of the informal paper's claims.
 | CNRS Problem 3 | `CNRSArithmetic`, `CNRSIntegration` | Partially proved | Addition and certified division outcomes proved; unrestricted online multiplication proved **impossible** in the governed model; streaming division is open |
 | CNRS Problem 4 | `CNRSCore`, `CNRSArithmetic`, `CNRSProblem1` | Partially proved | Finite operational kernel only; no general complex-representation completeness theorem |
 | CNRS R1 post-release | `CNRSIntegration` | Proved, finite Lean-specification scope | Finite-string addition and normalization preserve value; Python equivalence and parser completeness unproved |
-| CNRS Problem 4 post-release | `CNRSArithmetic` | Proved, restricted no-go | Divisor −1, zero delay, digits 0–4: no finite invariant remainder set containing zero; does not cover arbitrary online algorithms |
+| CNRS Problem 4 post-release | `CNRSArithmetic` | Proved, restricted no-go | Divisor −1, zero delay, digits 0–4: no finite invariant remainder set containing zero, nor a total finite-state remainder machine with the exact recurrence and initial zero; arbitrary online algorithms still outside scope |
 | CNRS Problem 2 multi-sheet branch states post-release | `CNRSProblem2` | Proved, conditional algebraic scope | Nonabelian S₃ monodromy cannot be faithfully replaced by commuting additive labels; a specific analytic cubic cover not formalized |
 | CNRS-H finite tail post-release | `CNRSProblem2` | Proved, finite scope | Real and complex finite tail majorant bounds only; no all-index majorant or infinite convergence proof |
 
