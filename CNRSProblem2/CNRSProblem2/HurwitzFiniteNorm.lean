@@ -72,4 +72,38 @@ theorem finiteHurwitzWeightedNorm_add_le
     _ = ‖x n‖ * (R ^ n / n.factorial) +
         ‖y n‖ * (R ^ n / n.factorial) := by ring
 
+/-- The factorially weighted norm of a single supported coefficient. -/
+theorem finiteHurwitzWeightedNorm_single (R : ℝ) (n : ℕ) (a : ℂ) :
+    finiteHurwitzWeightedNorm R (FiniteHurwitz.single n a) =
+      ‖a‖ * (R ^ n / n.factorial) := by
+  classical
+  by_cases ha : a = 0
+  · subst a
+    simp [finiteHurwitzWeightedNorm, FiniteHurwitz.single]
+  · simp [finiteHurwitzWeightedNorm, FiniteHurwitz.single, ha]
+
+/-- A basis Hurwitz product has exactly multiplicative weighted norm:
+the binomial factor cancels with the output factorial. -/
+theorem finiteHurwitzWeightedNorm_single_mul_single
+    (R : ℝ) (i j : ℕ) (a b : ℂ) :
+    finiteHurwitzWeightedNorm R
+      (FiniteHurwitz.single i a * FiniteHurwitz.single j b) =
+    finiteHurwitzWeightedNorm R (FiniteHurwitz.single i a) *
+      finiteHurwitzWeightedNorm R (FiniteHurwitz.single j b) := by
+  rw [FiniteHurwitz.single_mul_single]
+  simp only [finiteHurwitzWeightedNorm_single]
+  have hnorm : ‖((i + j).choose i) • (a * b)‖ =
+      ((i + j).choose i : ℝ) * (‖a‖ * ‖b‖) := by
+    simp [nsmul_eq_mul, norm_mul]
+  rw [hnorm]
+  calc
+    ((i + j).choose i : ℝ) * (‖a‖ * ‖b‖) *
+        (R ^ (i + j) / (i + j).factorial) =
+      (‖a‖ * ‖b‖) *
+        (((i + j).choose i : ℝ) * R ^ (i + j) / (i + j).factorial) := by ring
+    _ = (‖a‖ * (R ^ i / i.factorial)) *
+          (‖b‖ * (R ^ j / j.factorial)) := by
+      rw [hurwitz_factorial_weight]
+      ring
+
 end CNRSProblem2
