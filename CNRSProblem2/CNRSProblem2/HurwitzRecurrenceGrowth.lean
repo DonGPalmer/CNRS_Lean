@@ -45,7 +45,7 @@ theorem hurwitzRecCoeff_succ_succ {A : Type*} [Semiring A]
 
 /-- Exact CNRS-A recurrence coefficients without any complex conversion.
 The parameter may in particular be the exact value β⁻¹. -/
-def exactHurwitzRecCoeff (a : RAValue) (n : ℕ) : RAValue :=
+noncomputable def exactHurwitzRecCoeff (a : RAValue) (n : ℕ) : RAValue :=
   hurwitzRecCoeff a n
 
 /-- For complex coefficients, every recurrence value is dominated by
@@ -75,7 +75,6 @@ theorem hurwitzRecCoeff_norm_majorized (a : ℂ) (n : ℕ) :
                (↑(n + 1) : ℝ) *
                  (hurwitzRecState (‖a‖ : ℝ) n).1) := rfl
         rw [hc, hr]
-        simp only [Prod.fst, Prod.snd]
         refine ⟨h2, ?_, hn2, ?_⟩
         · calc
             ‖a * (hurwitzRecState a n).2 +
@@ -87,7 +86,9 @@ theorem hurwitzRecCoeff_norm_majorized (a : ℂ) (n : ℕ) :
                         ‖(↑(n + 1) : ℂ) *
                           (hurwitzRecState a n).1‖ :=
                       norm_add_le _ _
-                    _ = _ := by simp [norm_mul]
+                    _ = _ := by
+                        simp only [norm_mul]
+                        rw [Complex.norm_natCast]
             _ ≤ ‖a‖ * (hurwitzRecState (‖a‖ : ℝ) n).2 +
                 (↑(n + 1) : ℝ) *
                   (hurwitzRecState (‖a‖ : ℝ) n).1 := by
