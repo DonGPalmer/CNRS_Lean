@@ -83,6 +83,8 @@ per project rather than asserted in aggregate:
 | `CNRSProblem1` | **0** | — |
 | `CNRSProblem2` | 80, inherited | `CNRSCore`, via the L9/L10 codec layers |
 
+**Pending PR #1 qualification (not part of published v1.0.3):** `CNRSIntegration.FiniteStringAdapter.parse_examples` additionally uses one *local* `native_decide` axiom (`parse_examples._native.native_decide.ax_1_1`) to check eight finite parser examples. This is distinct from the 2–4 inherited addition-carry axioms in the table above. The `addFiniteStrings_value`, `addNormalized_value`, and `addDisplay_value` proof chains still inherit the existing arithmetic carry-set axioms; they are *not* a proof that Python parser or formatter code implements the Lean functions. The concrete footprint can be inspected with `#print axioms CNRSIntegration.parse_examples`. No new foundational arithmetic axiom is introduced.
+
 All `native_decide` uses here close finitely many concrete small-integer
 case splits (bounded decision procedures), not open-ended semantic content —
 but don't take that characterization on faith either; `#print axioms` on any
