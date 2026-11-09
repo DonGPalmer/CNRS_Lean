@@ -46,4 +46,23 @@ theorem no_faithful_abelian_branch_label {A : Type*} [AddCommMonoid A]
   exact threeSheetSwaps_noncommute
     (hinj (abelianLabel_conflates_swaps label hcomp))
 
+/-- An additive path label cannot determine a surjective noncommuting
+    three-sheet monodromy: two loop products have identical labels but
+    different induced permutations.  Analytic realization of a particular
+    cubic's monodromy remains outside this algebraic theorem. -/
+theorem additive_state_does_not_determine_monodromy
+    {G A : Type*} [Group G] [AddCommMonoid A]
+    (perm : G →* Equiv.Perm (Fin 3))
+    (hsurj : Function.Surjective perm)
+    (s : G → A)
+    (hs : ∀ g h, s (g * h) = s g + s h) :
+    ∃ g h, s (g * h) = s (h * g) ∧
+      perm (g * h) ≠ perm (h * g) := by
+  obtain ⟨g, hg⟩ := hsurj swap01
+  obtain ⟨h, hh⟩ := hsurj swap12
+  refine ⟨g, h, ?_, ?_⟩
+  · rw [hs, hs, add_comm]
+  · rw [map_mul, map_mul, hg, hh]
+    exact threeSheetSwaps_noncommute
+
 end CNRSProblem2
