@@ -55,7 +55,9 @@ theorem hurwitzRecState_norm_factorial (a : ℂ) (ha : ‖a‖ ≤ 1) :
               _ ≤ ‖a * (hurwitzRecState a n).2‖ +
                 ‖(↑(n + 1) : ℂ) * (hurwitzRecState a n).1‖ :=
                   norm_add_le _ _
-              _ = _ := by rw [norm_mul, norm_mul, Complex.norm_natCast]
+              _ = _ := by
+                rw [norm_mul, norm_mul, Complex.norm_natCast]
+                simp only [Nat.cast_add, Nat.cast_one]
         have ha' : ‖a‖ * ‖(hurwitzRecState a n).2‖ ≤
             (((n + 1).factorial : ℕ) : ℝ) := by
           calc
@@ -72,7 +74,7 @@ theorem hurwitzRecState_norm_factorial (a : ℂ) (ha : ‖a‖ ≤ 1) :
               rw [Nat.factorial_succ]
               push_cast
               ring
-        exact hnorm.trans ((add_le_add ha' hmul).trans hbound)
+        exact hnorm.trans ((add_le_add ha' hmul).trans (by nlinarith [hbound]))
 
 /-- Every coefficient in the complex recurrence obeys a factorial
 majorant. This includes any a with norm at most one. -/
