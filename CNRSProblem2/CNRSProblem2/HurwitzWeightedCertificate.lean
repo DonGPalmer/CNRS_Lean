@@ -21,6 +21,40 @@ theorem hurwitz_choose_factorial (i j : ℕ) :
   simpa [Nat.add_sub_cancel_left] using
     (Nat.choose_mul_factorial_mul_factorial (Nat.le_add_right i j))
 
+/-- The exact factorial weighting of each Hurwitz convolution pair
+reduces to the product of the separately normalized weights. -/
+theorem hurwitz_factorial_weight (i j : ℕ) (R : ℝ) :
+    (i + j).choose i * R ^ (i + j) / (i + j).factorial =
+      (R ^ i / i.factorial) * (R ^ j / j.factorial) := by
+  have hc : ((i + j).choose i : ℝ) * (i.factorial : ℝ) *
+      (j.factorial : ℝ) = ((i + j).factorial : ℝ) := by
+    exact_mod_cast hurwitz_choose_factorial i j
+  have hi : (i.factorial : ℝ) ≠ 0 := by positivity
+  have hj : (j.factorial : ℝ) ≠ 0 := by positivity
+  have hij : ((i + j).factorial : ℝ) ≠ 0 := by positivity
+  rw [pow_add]
+  apply (div_eq_iff hij).2
+  rw [← hc]
+  field_simp
+  ring
+
+/-- Exact product factorization for the factorially weighted absolute
+contributions to a finite Hurwitz convolution, before degree aggregation. -/
+theorem finite_hurwitz_factorial_pair_budget (s t : Finset ℕ)
+    (a b : ℕ → ℂ) (R : ℝ) :
+    (∑ i ∈ s, ∑ j ∈ t,
+      ‖a i * b j‖ *
+        (((i + j).choose i : ℝ) * R ^ (i + j) / (i + j).factorial)) =
+      (∑ i ∈ s, ‖a i‖ * (R ^ i / i.factorial)) *
+      (∑ j ∈ t, ‖b j‖ * (R ^ j / j.factorial)) := by
+  rw [Finset.sum_mul_sum]
+  apply Finset.sum_congr rfl
+  intro i hi
+  apply Finset.sum_congr rfl
+  intro j hj
+  rw [norm_mul, hurwitz_factorial_weight]
+  ring
+
 /-- The sum of all finitely many weighted pairwise products factorizes,
 which is the exact finite convolution norm budget before cancellation. -/
 theorem finite_weighted_pair_budget (s t : Finset ℕ)
