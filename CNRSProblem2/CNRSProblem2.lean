@@ -17,6 +17,7 @@ import CNRSProblem2.HurwitzConvolutionNorm
 import CNRSProblem2.HurwitzProductBudget
 import CNRSProblem2.HurwitzNormAxiomAudit
 import CNRSProblem2.HurwitzUniformBudget
+import CNRSProblem2.HurwitzBudgetBridge
 
 /-!
 CNRS Problem 2 formalization.
