@@ -54,6 +54,7 @@ theorem UniformCoefficientBudget.tsum_norm_shift_le
 /-- ACTUAL INFINITE TAIL: the difference of a convergent complex series
 and its degree-N polynomial is bounded uniformly on the unit disk by
 the certified all-order budget times |z|^(N+1). -/
+set_option maxHeartbeats 1200000 in
 theorem UniformCoefficientBudget.infinite_evaluation_tail_le
     (a : ℕ → ℂ) (cert : UniformCoefficientBudget a)
     (N : ℕ) (z : ℂ) (hz : ‖z‖ ≤ 1) :
