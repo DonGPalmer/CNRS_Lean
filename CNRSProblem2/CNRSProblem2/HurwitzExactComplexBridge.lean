@@ -98,6 +98,7 @@ noncomputable def betaExactBudget :
         (((-2 : ℂ) + Complex.I)⁻¹) ha
         (3 / 4 : ℝ) (by norm_num) (by norm_num)).all_partial M
     have hbound : (1 - (3 / 4 : ℝ))⁻¹ = 4 := by norm_num
+    change _ ≤ (1 - (3 / 4 : ℝ))⁻¹ at hcert
     rw [hbound] at hcert
     simpa only [raToC_betaHurwitzCoeff] using hcert
 
