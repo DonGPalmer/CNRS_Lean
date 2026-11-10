@@ -20,11 +20,12 @@ noncomputable def recurrenceSeries (a : ℂ) : PowerSeries ℂ :=
 
 @[simp] theorem recurrenceSeries_coeff (a : ℂ) (n : ℕ) :
     PowerSeries.coeff n (recurrenceSeries a) =
-      hurwitzRecCoeff a n / (n.factorial : ℂ) := rfl
+      hurwitzRecCoeff a n / (n.factorial : ℂ) := by
+  simp [recurrenceSeries]
 
 @[simp] theorem recurrenceSeries_constantCoeff (a : ℂ) :
     PowerSeries.constantCoeff (recurrenceSeries a) = 1 := by
-  simp [recurrenceSeries, hurwitzRecCoeff]
+  simp [recurrenceSeries, hurwitzRecCoeff, hurwitzRecState]
 
 /-- Normalized (complex) coefficient recurrence corresponding to
 Y'=(a+X)Y. -/
@@ -44,13 +45,15 @@ theorem normalized_step (a : ℂ) (n : ℕ) :
     rw [Nat.factorial_succ]
     push_cast
     ring
-  have hf : (n.factorial : ℂ) ≠ 0 := by positivity
-  have hn1 : ((n : ℂ) + 1) ≠ 0 := by positivity
-  have hn2 : ((n : ℂ) + 2) ≠ 0 := by positivity
+  have hf : (n.factorial : ℂ) ≠ 0 := by
+    exact_mod_cast Nat.factorial_ne_zero n
+  have hn1 : ((n : ℂ) + 1) ≠ 0 := by
+    exact_mod_cast (Nat.succ_ne_zero n)
+  have hn2 : ((n : ℂ) + 2) ≠ 0 := by
+    exact_mod_cast (Nat.succ_ne_zero (n + 1))
   rw [h1, h2]
   push_cast
-  field_simp
-  ring
+  field_simp <;> ring
 
 /-- The exact normalized recurrence satisfies the formal ODE in the
 power-series ring. -/
@@ -60,14 +63,13 @@ theorem recurrenceSeries_derivative (a : ℂ) :
   ext n
   cases n with
   | zero =>
-      simp [recurrenceSeries, PowerSeries.coeff_derivative,
-        add_mul, PowerSeries.coeff_zero_X_mul]
+      simp [PowerSeries.coeff_derivative, add_mul,
+        recurrenceSeries_coeff, hurwitzRecCoeff, hurwitzRecState]
   | succ n =>
       have hrec := normalized_step a n
-      simp only [PowerSeries.coeff_derivative, add_mul,
-        PowerSeries.coeff_add, PowerSeries.coeff_C_mul,
-        PowerSeries.coeff_succ_X_mul, recurrenceSeries_coeff]
-      push_cast
+      rw [PowerSeries.coeff_derivative]
+      simp [add_mul, PowerSeries.coeff_succ_X_mul,
+        recurrenceSeries_coeff]
       convert hrec using 1 <;> ring
 
 #print axioms normalized_step
