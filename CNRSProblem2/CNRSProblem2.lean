@@ -25,6 +25,7 @@ import CNRSProblem2.HurwitzConstructiveBudget
 import CNRSProblem2.HurwitzExactComplexBridge
 import CNRSProblem2.HurwitzSharpMajorant
 import CNRSProblem2.HurwitzInfiniteTail
+import CNRSProblem2.HurwitzExactInfiniteTail
 
 /-!
 CNRS Problem 2 formalization.
