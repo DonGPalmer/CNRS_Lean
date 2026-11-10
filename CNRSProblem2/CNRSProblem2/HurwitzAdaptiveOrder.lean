@@ -19,6 +19,8 @@ order selector.
 
 namespace CNRSProblem2.HurwitzSharp
 
+open Filter
+
 /-- Quantitative error envelope for the canonical exact recurrence. -/
 noncomputable def sharpTailEnvelope (R r : ℝ) (N : ℕ) : ℝ :=
   Real.exp ((Real.sqrt 5)⁻¹ * R + R ^ 2 / 2) * (r / R) ^ (N + 1)
