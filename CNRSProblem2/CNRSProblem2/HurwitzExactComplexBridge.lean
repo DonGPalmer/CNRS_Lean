@@ -2,6 +2,7 @@ import CNRSProblem2.HurwitzConstructiveBudget
 import CNRSProblem2.HurwitzRecurrenceGrowth
 import CNRSProblem2.FiniteLaurentValueCodec
 import Mathlib.NumberTheory.Zsqrtd.GaussianInt
+import Mathlib.RingTheory.SimpleRing.Basic
 
 /-!
 # CNRS-H exact-to-analytic coefficient bridge
@@ -30,6 +31,18 @@ noncomputable def toC : CnrsQ2.GaussianFrac →+* ℂ :=
 into the complex analytic coefficient field. -/
 noncomputable def raToC : RAValue →+* ℂ :=
   toC.comp finiteLaurentSubring.subtype
+
+/-- The Gaussian fraction-field map is injective, since it maps
+a field into a nontrivial ring. -/
+theorem toC_injective : Function.Injective toC :=
+  RingHom.injective toC
+
+/-- Consequently the restriction to the governed exact coefficient ring
+is an actual algebraic embedding, not just a possibly collapsing map. -/
+theorem raToC_injective : Function.Injective raToC := by
+  intro x y h
+  apply Subtype.ext
+  exact toC_injective h
 
 /-- The exact radix beta maps to the complex number -2+i. -/
 theorem toC_betaFrac :
@@ -63,6 +76,34 @@ theorem raToC_betaInverseExact :
   unfold raToC
   show toC ((1 : CnrsQ2.GaussianFrac) / CnrsQ2.betaFrac) = _
   rw [map_div₀, map_one, toC_betaFrac, one_div]
+
+/-- Explicit Gaussian rational value of the inverse of -2+i. -/
+theorem complex_beta_inverse_explicit :
+    ((-2 : ℂ) + Complex.I)⁻¹ =
+      ((-2 : ℂ) - Complex.I) / 5 := by
+  have hb : ((-2 : ℂ) + Complex.I) ≠ 0 := by
+    intro h
+    have hr := congrArg Complex.re h
+    norm_num at hr
+  have hprod :
+      ((-2 : ℂ) + Complex.I) *
+        (((-2 : ℂ) - Complex.I) / 5) = 1 := by
+    have hI : Complex.I * Complex.I = (-1 : ℂ) := Complex.I_mul_I
+    calc
+      _ = (4 - Complex.I * Complex.I) / 5 := by ring
+      _ = 1 := by rw [hI]; norm_num
+  calc
+    ((-2 : ℂ) + Complex.I)⁻¹ =
+        ((-2 : ℂ) + Complex.I)⁻¹ * 1 := by ring
+    _ = ((-2 : ℂ) + Complex.I)⁻¹ *
+          (((-2 : ℂ) + Complex.I) *
+            (((-2 : ℂ) - Complex.I) / 5)) := by rw [hprod]
+    _ = (((-2 : ℂ) - Complex.I) / 5) := by
+      rw [← mul_assoc, inv_mul_cancel₀ hb, one_mul]
+
+theorem raToC_betaInverse_explicit :
+    raToC betaInverseExact = ((-2 : ℂ) - Complex.I) / 5 := by
+  rw [raToC_betaInverseExact, complex_beta_inverse_explicit]
 
 /-- The complex canonical parameter has small norm, as required by the
 already verified constructive factorial coefficient majorant. -/
@@ -109,6 +150,10 @@ theorem betaExactSummable :
       ((3 / 4 : ℝ) : ℂ) ^ n / (n.factorial : ℂ)) :=
   betaExactBudget.summable_coeff _
 
+#print axioms toC_injective
+#print axioms raToC_injective
+#print axioms complex_beta_inverse_explicit
+#print axioms raToC_betaInverse_explicit
 #print axioms toC_betaFrac
 #print axioms raToC_betaInverseExact
 #print axioms raToC_betaHurwitzCoeff
