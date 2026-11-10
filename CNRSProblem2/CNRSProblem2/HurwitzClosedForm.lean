@@ -38,9 +38,15 @@ theorem quadraticExponent_derivative (a : ℂ) :
       PowerSeries.C a + PowerSeries.X := by
   unfold quadraticExponent
   simp [PowerSeries.derivative_pow, PowerSeries.derivative_X,
-    PowerSeries.derivative_C, PowerSeries.derivative_one,
-    PowerSeries.smul_eq_C_mul]
-  ring
+    PowerSeries.derivative_C]
+  have hhalf : PowerSeries.C (1 / 2 : ℂ) * (2 : PowerSeries ℂ) = 1 := by
+    have h : (1 / 2 : ℂ) * 2 = 1 := by norm_num
+    have hh := congrArg (fun x : ℂ => PowerSeries.C x) h
+    simpa only [map_mul, map_ofNat, map_one] using hh
+  calc
+    PowerSeries.C (1 / 2 : ℂ) * (PowerSeries.X : PowerSeries ℂ) * 2 =
+      (PowerSeries.C (1 / 2 : ℂ) * 2) * PowerSeries.X := by ring
+    _ = PowerSeries.X := by rw [hhalf]; ring
 
 /-- The formal exponential satisfies Y'=(a+X)Y. -/
 theorem formalExp_derivative (a : ℂ) :
