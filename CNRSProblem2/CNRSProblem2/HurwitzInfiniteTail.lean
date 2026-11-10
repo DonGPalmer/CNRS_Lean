@@ -61,7 +61,7 @@ theorem UniformCoefficientBudget.infinite_evaluation_tail_le
         (∑ n ∈ Finset.range (N + 1), a n * z ^ n)‖ ≤
       ‖z‖ ^ (N + 1) * cert.bound := by
   have hnorm : Summable (fun n : ℕ => ‖a n * z ^ n‖) :=
-    summable_norm_iff.mpr (cert.summable_evaluation a z hz)
+    (summable_norm_iff).mpr (cert.summable_evaluation a z hz)
   have hnormShift : Summable (fun n : ℕ =>
       ‖a (n + (N + 1)) * z ^ (n + (N + 1))‖) :=
     (summable_nat_add_iff (N + 1)).mpr hnorm
