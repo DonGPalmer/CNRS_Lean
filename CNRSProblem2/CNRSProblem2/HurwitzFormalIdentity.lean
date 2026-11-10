@@ -100,7 +100,7 @@ theorem beta_exact_formal_exp :
         (quadraticExponent (((-2 : ℂ) + Complex.I)⁻¹)) := by
   have h := recurrenceSeries_eq_formalExp
     (((-2 : ℂ) + Complex.I)⁻¹)
-  simpa only [recurrenceSeries, PowerSeries.mk.injEq,
+  simpa only [recurrenceSeries,
       CNRSProblem2.HurwitzExactBridge.raToC_betaHurwitzCoeff] using h
 
 #print axioms ode_unique
