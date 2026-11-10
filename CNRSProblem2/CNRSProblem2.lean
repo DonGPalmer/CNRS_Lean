@@ -19,6 +19,7 @@ import CNRSProblem2.HurwitzNormAxiomAudit
 import CNRSProblem2.HurwitzUniformBudget
 import CNRSProblem2.HurwitzBudgetBridge
 import CNRSProblem2.HurwitzRecurrenceGrowth
+import CNRSProblem2.HurwitzBlockDecay
 
 /-!
 CNRS Problem 2 formalization.
