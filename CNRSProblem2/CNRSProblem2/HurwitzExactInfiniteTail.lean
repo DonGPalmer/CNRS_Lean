@@ -75,7 +75,7 @@ theorem betaExact_infinite_tail_le
           ((R : ℂ) ^ n * z ^ n) / (n.factorial : ℂ) := by ring
       _ = raToC (betaHurwitzCoeff n) * w ^ n /
           (n.factorial : ℂ) := by rw [hpow]
-  have hcert : UniformCoefficientBudget a :=
+  let hcert : UniformCoefficientBudget a :=
     betaExactSharpBudget R hR.le
   have htail :=
     hcert.infinite_evaluation_tail_le a N z hz
