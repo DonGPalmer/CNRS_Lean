@@ -60,8 +60,17 @@ theorem UniformCoefficientBudget.infinite_evaluation_tail_le
     ‖(∑' n : ℕ, a n * z ^ n) -
         (∑ n ∈ Finset.range (N + 1), a n * z ^ n)‖ ≤
       ‖z‖ ^ (N + 1) * cert.bound := by
-  have hnorm : Summable (fun n : ℕ => ‖a n * z ^ n‖) :=
-    (summable_norm_iff).mpr (cert.summable_evaluation a z hz)
+  have hnorm : Summable (fun n : ℕ => ‖a n * z ^ n‖) := by
+    refine Summable.of_nonneg_of_le
+      (fun n => norm_nonneg _) (fun n => ?_) (cert.summable_norm a)
+    rw [norm_mul, norm_pow]
+    have hpow : ‖z‖ ^ n ≤ 1 := by
+      simpa using
+        (pow_le_pow_of_le_one (norm_nonneg z) hz (Nat.zero_le n))
+    calc
+      ‖a n‖ * ‖z‖ ^ n ≤ ‖a n‖ * 1 :=
+        mul_le_mul_of_nonneg_left hpow (norm_nonneg _)
+      _ = ‖a n‖ := by ring
   have hnormShift : Summable (fun n : ℕ =>
       ‖a (n + (N + 1)) * z ^ (n + (N + 1))‖) :=
     (summable_nat_add_iff (N + 1)).mpr hnorm
