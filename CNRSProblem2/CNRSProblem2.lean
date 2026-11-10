@@ -23,6 +23,7 @@ import CNRSProblem2.HurwitzBlockDecay
 import CNRSProblem2.HurwitzFactorialMajorant
 import CNRSProblem2.HurwitzConstructiveBudget
 import CNRSProblem2.HurwitzExactComplexBridge
+import CNRSProblem2.HurwitzSharpMajorant
 
 /-!
 CNRS Problem 2 formalization.
