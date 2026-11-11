@@ -24,10 +24,9 @@ theorem ode_coeff_one (a : ℂ) (f : PowerSeries ℂ)
       (PowerSeries.C a + PowerSeries.X) * f) :
     PowerSeries.coeff 1 f = a * PowerSeries.coeff 0 f := by
   have h := congrArg (PowerSeries.coeff 0) hf
-  simpa only [PowerSeries.coeff_derivative, add_mul,
+  simpa [PowerSeries.coeff_derivative, add_mul,
       map_add, PowerSeries.coeff_C_mul,
-      PowerSeries.coeff_zero_X_mul, Nat.zero_add,
-      Nat.cast_one, mul_one, add_zero] using h
+      PowerSeries.coeff_zero_X_mul] using h
 
 /-- Forced two-step relation for all formal solution coefficients. -/
 theorem ode_coeff_step (a : ℂ) (f : PowerSeries ℂ)
@@ -81,10 +80,13 @@ theorem formalExp_constantCoeff (a : ℂ) :
     PowerSeries.constantCoeff
       ((PowerSeries.exp ℂ).subst (quadraticExponent a)) = 1 := by
   classical
+  have hq : MvPowerSeries.constantCoeff (quadraticExponent a) = 0 := by
+    simpa only [PowerSeries.constantCoeff_eq] using
+      (quadraticExponent_constantCoeff a)
   rw [PowerSeries.constantCoeff_eq,
       PowerSeries.constantCoeff_subst (quadraticExponent_hasSubst a),
       finsum_eq_single _ 0 (fun d hd => by
-        rw [map_pow, quadraticExponent_constantCoeff, zero_pow hd, smul_zero])]
+        rw [map_pow, hq, zero_pow hd, smul_zero])]
   simp [Algebra.algebraMap_eq_smul_one,
     PowerSeries.coeff_zero_eq_constantCoeff_apply,
     PowerSeries.constantCoeff_exp]
