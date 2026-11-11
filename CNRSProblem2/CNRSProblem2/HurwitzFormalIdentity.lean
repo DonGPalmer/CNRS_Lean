@@ -25,7 +25,7 @@ theorem ode_coeff_one (a : ℂ) (f : PowerSeries ℂ)
     PowerSeries.coeff 1 f = a * PowerSeries.coeff 0 f := by
   have h := congrArg (PowerSeries.coeff 0) hf
   simpa only [PowerSeries.coeff_derivative, add_mul,
-      PowerSeries.coeff_add, PowerSeries.coeff_C_mul,
+      map_add, PowerSeries.coeff_C_mul,
       PowerSeries.coeff_zero_X_mul, Nat.zero_add,
       Nat.cast_one, mul_one, add_zero] using h
 
@@ -38,7 +38,7 @@ theorem ode_coeff_step (a : ℂ) (f : PowerSeries ℂ)
       a * PowerSeries.coeff (n + 1) f + PowerSeries.coeff n f := by
   have h := congrArg (PowerSeries.coeff (n + 1)) hf
   simp only [PowerSeries.coeff_derivative, add_mul,
-    PowerSeries.coeff_add, PowerSeries.coeff_C_mul,
+    map_add, PowerSeries.coeff_C_mul,
     PowerSeries.coeff_succ_X_mul] at h
   convert h using 1 <;> push_cast <;> ring
 
@@ -58,10 +58,14 @@ theorem ode_unique (a : ℂ) (f g : PowerSeries ℂ)
       calc
         PowerSeries.coeff 1 f = a * PowerSeries.coeff 0 f :=
           ode_coeff_one a f hf
-        _ = a * PowerSeries.coeff 0 g := by rw [hzero]; rfl
+        _ = a * PowerSeries.coeff 0 g := by
+          have hc : PowerSeries.coeff 0 f = PowerSeries.coeff 0 g := by
+            simpa only [PowerSeries.coeff_zero_eq_constantCoeff_apply] using hzero
+          rw [hc]
         _ = PowerSeries.coeff 1 g := (ode_coeff_one a g hg).symm
   | more n ih0 ih1 =>
-      have hne : (n + 2 : ℂ) ≠ 0 := by positivity
+      have hne : (n + 2 : ℂ) ≠ 0 := by
+        exact_mod_cast (Nat.succ_ne_zero (n + 1))
       apply (mul_right_cancel₀ hne)
       calc
         PowerSeries.coeff (n + 2) f * (n + 2 : ℂ) =
@@ -76,9 +80,14 @@ theorem ode_unique (a : ℂ) (f g : PowerSeries ℂ)
 theorem formalExp_constantCoeff (a : ℂ) :
     PowerSeries.constantCoeff
       ((PowerSeries.exp ℂ).subst (quadraticExponent a)) = 1 := by
-  rw [PowerSeries.constantCoeff_subst_of_constantCoeff_zero
-        (quadraticExponent_constantCoeff a),
-      PowerSeries.constantCoeff_exp, map_one]
+  classical
+  rw [PowerSeries.constantCoeff_eq,
+      PowerSeries.constantCoeff_subst (quadraticExponent_hasSubst a),
+      finsum_eq_single _ 0 (fun d hd => by
+        rw [map_pow, quadraticExponent_constantCoeff, zero_pow hd, smul_zero])]
+  simp [Algebra.algebraMap_eq_smul_one,
+    PowerSeries.coeff_zero_eq_constantCoeff_apply,
+    PowerSeries.constantCoeff_exp]
 
 /-- Formal identity: recurrence coefficients divided by n! are exactly
 the coefficients of exp(aX+X²/2) as a formal power series. -/
