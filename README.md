@@ -56,7 +56,23 @@ statements of the informal paper's claims.
 | CNRS R1 post-release | `CNRSIntegration` | Proved, finite Lean-specification scope | Finite-string addition and normalization preserve value; Python equivalence and parser completeness unproved |
 | CNRS Problem 4 post-release | `CNRSArithmetic` | Proved, restricted no-go | Divisor −1, zero delay, digits 0–4: no finite invariant remainder set containing zero, nor a total finite-state remainder machine with the exact recurrence and initial zero; arbitrary online algorithms still outside scope |
 | CNRS Problem 2 multi-sheet branch states post-release | `CNRSProblem2` | Proved, conditional algebraic scope | Nonabelian S₃ monodromy cannot be faithfully replaced by commuting additive labels; a specific analytic cubic cover not formalized |
-| CNRS-H finite tail post-release | `CNRSProblem2` | Proved, finite scope | Real and complex finite tail majorant bounds only; no all-index majorant or infinite convergence proof |
+| CNRS-H finite tail and weighted product post-release | `CNRSProblem2` | Proved, finite scope | Finite real/complex tails; factorial-weighted finite-support convolution submultiplicativity and product budgets |
+| CNRS-H canonical exact recurrence post-release | `CNRSProblem2` | Proved, recurrence-specific | Injective `RAValue → ℂ` map, exact β⁻¹ coefficients and sharp all-index bound `exp(R/√5 + R²/2)` for every `R≥0` |
+| CNRS-H actual infinite-tail post-release | `CNRSProblem2` | Proved, recurrence-specific | Convergent mapped exact series; `‖F(w)-P_N(w)‖ ≤ exp(R/√5+R²/2)(r/R)^(N+1)` for `0≤r<R`, `‖w‖≤r`; no arbitrary-jet certificate |
+
+**CNRS-H post-v1.0.3 development:** PRs #12–#19 were author-approved,
+reviewed and merged into `main` through
+`1747ec457731dabeee553ffb68593ae41668c080` (final integrated CI
+run `42871566570`). These results concern the **specific** exact
+second-order β⁻¹ recurrence and its embedding into ℂ; they do not
+formalize arbitrary infinite CNRS-H sequences or an analytic completion
+of the finite coefficient ring. The familiar closed form
+`Complex.exp (w/(-2+i) + w²/2)` was not yet a Lean theorem in that
+integrated source. The nonnegative exponential majorant is a proven
+upper bound, not a proved identity for the sum of true coefficient norms.
+See [the all-index scope note](CNRSProblem2/CNRS_H_ALLINDEX_SCOPE.md).
+These development results are **not** part of the immutable historical
+v1.0.3 release and do not constitute a Toolkit or Zenodo update.
 
 **What is explicitly *not* claimed**, programme-wide: arbitrary infinite-series
 serialization, analytic continuation or path reconstruction, unequal-branch
