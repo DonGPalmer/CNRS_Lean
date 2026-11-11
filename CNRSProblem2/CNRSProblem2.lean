@@ -26,6 +26,9 @@ import CNRSProblem2.HurwitzExactComplexBridge
 import CNRSProblem2.HurwitzSharpMajorant
 import CNRSProblem2.HurwitzInfiniteTail
 import CNRSProblem2.HurwitzExactInfiniteTail
+import CNRSProblem2.HurwitzClosedForm
+import CNRSProblem2.HurwitzFormalRecurrence
+import CNRSProblem2.HurwitzFormalIdentity
 
 /-!
 CNRS Problem 2 formalization.
